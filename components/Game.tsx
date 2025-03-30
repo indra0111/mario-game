@@ -1,8 +1,7 @@
 "use client"
 import { useEffect, useRef, useState } from 'react';
-import { Player, Platform, Enemy, GameState, Sweet, SweetType } from '../types/game';
+import { Player, Platform, GameState, Sweet, SweetType } from '../types/game';
 import GameMenu from './GameMenu';
-import { createPlaceholderSprite, createMarioSprite, createRunningMarioSprite } from '../utils/createSprites';
 import Obstacles from './Obstacles';
 import Sweets from './Sweets';
 import Background from './Background';
@@ -11,7 +10,6 @@ const GRAVITY = 0.5;
 const JUMP_FORCE = -15;
 const MOVEMENT_SPEED = 5;
 const AUTO_MOVE_SPEED = 3;
-const OBSTACLE_SPAWN_RATE = 0.005;
 const BACKGROUND_SCROLL_SPEED = 0.5; // Slower than foreground elements
 
 const OBSTACLE_TYPES = ['brick', 'spike', 'barrier'] as const;
@@ -385,7 +383,7 @@ export default function Game() {
     lives: 3
   });
 
-  const [platforms, setPlatforms] = useState<Platform[]>([
+  const [platforms] = useState<Platform[]>([
     {
       position: { x: 0, y: 500 },
       width: 800,
@@ -404,7 +402,6 @@ export default function Game() {
   const [coins, setCoins] = useState<Sweet[]>([]);
   const coinsRef = useRef<Sweet[]>([]);
   const obstaclesRef = useRef<Platform[]>([]);
-  const [enemies, setEnemies] = useState<Enemy[]>([]);
 
   // Add state for obstacles
   const [obstacles, setObstacles] = useState<Platform[]>([]);
@@ -415,8 +412,6 @@ export default function Game() {
   // Use refs for frequently updating values
   const playerRef = useRef<Player>(player);
   const gameStateRef = useRef<GameState>(gameState);
-  const animationFrameRef = useRef<number>(0);
-  const frameCountRef = useRef<number>(0);
 
   // Add keyboard state tracking
   const keys = useRef<{ [key: string]: boolean }>({});
@@ -701,7 +696,7 @@ export default function Game() {
       const pattern = OBSTACLE_PATTERNS[Math.floor(Math.random() * OBSTACLE_PATTERNS.length)];
       const config = OBSTACLE_CONFIGS[obstacleType];
       
-      let obstacles: Platform[] = [];
+      const obstacles: Platform[] = [];
       const baseY = Math.random() * 300 + 200;
       const baseX = 800;
 
@@ -835,9 +830,6 @@ export default function Game() {
 
         // Check collisions
         checkCollisions();
-
-        // Draw game elements
-        drawPlayer(ctx);
         drawPlatforms(ctx);
         drawUI(ctx);
 
@@ -995,13 +987,6 @@ export default function Game() {
   };
 
   // Drawing functions
-  const drawPlayer = (ctx: CanvasRenderingContext2D) => {
-    if (!spritesLoaded) return;
-
-    // Instead of drawing the player sprite, we'll render the PlayerCharacter component
-    // The component will be rendered by React's DOM system
-  };
-
   const drawPlatforms = (ctx: CanvasRenderingContext2D) => {
     if (!spritesLoaded) return;
     console.log("Plat in drawPlatforms", platforms)
@@ -1132,7 +1117,7 @@ export default function Game() {
           <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl border border-white/20 shadow-2xl transform transition-all duration-500 hover:scale-105">
             <div className="text-center">
               <h2 className="text-5xl font-bold text-white mb-6 animate-bounce">🎉 Victory! 🎉</h2>
-              <p className="text-2xl text-yellow-300 mb-8">Congratulations! You've collected 50 coins!</p>
+              <p className="text-2xl text-yellow-300 mb-8">Congratulations! You&apos;ve collected 50 coins!</p>
               
               <div className="bg-white/20 p-6 rounded-xl mb-8">
                 <p className="text-lg text-white mb-2">Your Coupon Code:</p>

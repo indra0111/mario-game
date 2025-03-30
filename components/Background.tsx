@@ -1,9 +1,8 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Apple } from 'lucide-react';
 
 const Background: React.FC = () => {
-  const [gameState, setGameState] = useState('playing');
-  const [decorations, setDecorations] = useState([]);
+  const gameState = 'playing';
   
   const mountainsRef = useRef<HTMLDivElement>(null);
   const cloudsRef = useRef<HTMLDivElement[]>([]);
@@ -105,10 +104,6 @@ const Background: React.FC = () => {
   }, [gameState]);
 
   const renderReligiousBuildings = () => {
-    return null;
-  };
-  
-  const renderBuildingLogos = () => {
     return null;
   };
 
